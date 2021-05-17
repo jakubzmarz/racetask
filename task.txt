@@ -1,0 +1,36 @@
+1. Please create a java class RacePrice that will hold:
+a. base price for a race
+b. list of taxes prices
+Prices are non-negative numbers representing money (please skip the currency information, it is irrelevant here).
+2.    Total price for RacePrice is sum of base price and taxes prices.
+3.    An Gaming company would like to introduce a special offer for their customers. It will define a total price limit at which it will offer races.
+
+Your task is to implement a function which will convert RacePrice to meet the Gaming company total price limit.
+4.    Given the RacePrice object and the total price limit value,
+     modify all prices in RacePrice object proportionally (as much as possible),
+     so that the sum of base and taxes is equal to total price limit defined by the Gaming company.
+5.    It's critical that the total price for RacePrice is exactly equal to the total price limit.
+6.    Please create unit tests.
+7.    In case of undefined requirements please make reasonable assumptions.
+
+Example 1:
+Base = 10
+Tax = 5
+Tax = 5
+total price limit = 10
+Result:
+Base = 5
+Tax - 2.5
+Tax - 2.5
+____________________________
+Example 2:
+Base = 9
+Tax = 1
+Tax = 1
+Tax = 1
+total price limit = 6
+Result:
+Base = 4.5
+Tax = 0.5
+Tax = 0.5
+Tax = 0.5
