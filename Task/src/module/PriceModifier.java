@@ -58,14 +58,13 @@ public class PriceModifier
 
     public RacePrice applyLimit()
     {
-        RacePrice finalRacePrice;
+
         List<BigDecimal> pricesList = getCalculatedFinalPrices();
         BigDecimal finalPrice = pricesList.stream().reduce(BigDecimal.ZERO,BigDecimal::add);
         if(finalPrice.subtract(priceLimit).compareTo(BigDecimal.ZERO) != 0)
             pricesList.set(0,pricesList.get(0).subtract(finalPrice.subtract(priceLimit)));
         BigDecimal finalBasePrice = pricesList.remove(0);
         BigDecimal[] taxes = new BigDecimal[pricesList.size()];
-        finalRacePrice = new RacePrice(finalBasePrice, pricesList.toArray(taxes));
-        return finalRacePrice;
+        return new RacePrice(finalBasePrice, pricesList.toArray(taxes));
     }
 }
