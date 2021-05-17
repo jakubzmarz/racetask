@@ -3,38 +3,51 @@ package test;
 import module.PriceModifier;
 import module.RacePrice;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class RacePriceTest
 {
-    @Test
-    public void getRacePriceTest()
-    {
-        RacePrice racePrice = new RacePrice(new BigDecimal(67.50), new BigDecimal(22.50), new BigDecimal(10));
-        Assertions.assertEquals(racePrice.getFullRacePrice(),new BigDecimal(100));
-    }
 
     @Test
-    public void calculatePriceProportionTest()
+    public void testFirstScenario()
     {
-
-    }
-
-    @Test
-    public void getFinalPriceTest()
-    {
-        RacePrice racePrice = new RacePrice(new BigDecimal(15));
+        RacePrice racePrice = new RacePrice(new BigDecimal(10),new BigDecimal(5),new BigDecimal(5));
         PriceModifier priceModifier = new PriceModifier(racePrice,new BigDecimal(10));
-        Assertions.assertEquals(new BigDecimal("10.00"), priceModifier.getFinalPrice());
+        racePrice = priceModifier.applyLimit();
+        Assertions.assertEquals(BigDecimal.valueOf(5.00).setScale(2),
+                racePrice.getBasePrice());
+        Assertions.assertEquals(BigDecimal.valueOf(2.50).setScale(2),
+                racePrice.getTaxList().get(0));
+        Assertions.assertEquals(BigDecimal.valueOf(2.50).setScale(2),
+                racePrice.getTaxList().get(1));
     }
 
     @Test
-    public void getCalculatedFinalPricesTest()
+    public void testSecondScenario()
     {
-        RacePrice racePrice = new RacePrice(new BigDecimal(15),new BigDecimal(1),new BigDecimal(2),new BigDecimal(3));
-        PriceModifier priceModifier = new PriceModifier(racePrice,new BigDecimal(16));
-        System.out.println(priceModifier.getFinalPrice());
+        RacePrice racePrice = new RacePrice(new BigDecimal(9),new BigDecimal(1),new BigDecimal(1), new BigDecimal(1));
+        PriceModifier priceModifier = new PriceModifier(racePrice,new BigDecimal(6));
+        racePrice = priceModifier.applyLimit();
+        Assertions.assertEquals(BigDecimal.valueOf(4.5).setScale(2),racePrice.getBasePrice());
+        Assertions.assertEquals(BigDecimal.valueOf(0.5).setScale(2),racePrice.getTaxList().get(0));
+        Assertions.assertEquals(BigDecimal.valueOf(0.5).setScale(2),racePrice.getTaxList().get(1));
+        Assertions.assertEquals(BigDecimal.valueOf(0.5).setScale(2),racePrice.getTaxList().get(2));
     }
+    /*static Stream<Arguments> loadPrices()
+    {
+        return Stream.of(
+                Arguments.arguments(BigDecimal.valueOf(10),BigDecimal.valueOf(5), BigDecimal.valueOf(5),
+                        BigDecimal.valueOf(10),
+                        BigDecimal.valueOf(5), BigDecimal.valueOf(2.5), BigDecimal.valueOf(2.5)),
+                Arguments.arguments(BigDecimal.valueOf(9),BigDecimal.valueOf(1), BigDecimal.valueOf(1), BigDecimal.valueOf(1),
+                        BigDecimal.valueOf(6),
+                        BigDecimal.valueOf(4.5), BigDecimal.valueOf(2.5), BigDecimal.valueOf(2.5))
+        )
+    }*/
 }
