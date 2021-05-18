@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PriceModifier
+public final class PriceModifier
 {
     private static BigDecimal getFullRacePrice(RacePrice rp)
     {
