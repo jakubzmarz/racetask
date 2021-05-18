@@ -3,68 +3,62 @@ package module;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PriceModifier
 {
-    private RacePrice racePrice;
-    private List<BigDecimal> priceProportionsList = new ArrayList<>();
-    private List<BigDecimal> allPricesList = new ArrayList<>();
-    private BigDecimal priceLimit;
-
-    public PriceModifier(RacePrice racePrice, BigDecimal priceLimit)
+    private static BigDecimal getFullRacePrice(RacePrice rp)
     {
-        this.racePrice = racePrice;
-        this.priceLimit = priceLimit;
-        loadPricesToList();
-    }
-
-    private BigDecimal getFullRacePrice()
-    {
-        return racePrice.getTaxList()
+        return rp.getTaxList()
                 .stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .add(racePrice.getBasePrice());
+                .add(rp.getBasePrice());
     }
 
-    private void loadPricesToList()
+    private static List<BigDecimal> loadPricesToList(RacePrice rp)
     {
-        allPricesList.add(0,racePrice.getBasePrice());
-        allPricesList.addAll(racePrice.getTaxList());
+        List<BigDecimal> allPricesList = new ArrayList<>();
+        allPricesList.add(0,rp.getBasePrice());
+        allPricesList.addAll(rp.getTaxList());
+        return allPricesList;
     }
 
-    private List<BigDecimal> calculatePriceProportion()
+    private static List<BigDecimal> calculatePriceProportion(RacePrice rp)
     {
+        List<BigDecimal> priceProportionsList = new ArrayList<>();
+        List<BigDecimal> allPricesList = loadPricesToList(rp);
         for(int i = 0; i < allPricesList.size(); i++)
         {
             priceProportionsList
-                    .add(i, allPricesList.get(i)
-                            .divide(getFullRacePrice(), 3, RoundingMode.HALF_UP));
+                    .add(i, allPricesList
+                            .get(i)
+                            .divide(getFullRacePrice(rp), 3, RoundingMode.HALF_UP));
         }
         return priceProportionsList;
     }
 
-    private List<BigDecimal> getCalculatedFinalPrices()
+    private static List<BigDecimal> getCalculatedFinalPrices(RacePrice rp, BigDecimal limit)
     {
-        return calculatePriceProportion()
+        return calculatePriceProportion(rp)
                 .stream()
                 .map(t -> t
-                        .multiply(priceLimit)
+                        .multiply(limit)
                         .setScale(2, RoundingMode.HALF_UP))
                 .collect(Collectors.toList());
     }
 
-    public RacePrice applyLimit()
+    public static RacePrice applyLimit(RacePrice rp, BigDecimal limit)
     {
-
-        List<BigDecimal> pricesList = getCalculatedFinalPrices();
+        List<BigDecimal> pricesList = getCalculatedFinalPrices(rp,limit);
         BigDecimal finalPrice = pricesList.stream().reduce(BigDecimal.ZERO,BigDecimal::add);
-        if(finalPrice.subtract(priceLimit).compareTo(BigDecimal.ZERO) != 0)
-            pricesList.set(0,pricesList.get(0).subtract(finalPrice.subtract(priceLimit)));
+
+        if(finalPrice.subtract(limit).compareTo(BigDecimal.ZERO) != 0)
+            pricesList.set(0,pricesList.get(0).subtract(finalPrice.subtract(limit)));
+
         BigDecimal finalBasePrice = pricesList.remove(0);
         BigDecimal[] taxes = new BigDecimal[pricesList.size()];
+
         return new RacePrice(finalBasePrice, pricesList.toArray(taxes));
     }
 }
