@@ -35,15 +35,5 @@ public class RacePriceTest
         Assertions.assertEquals(BigDecimal.valueOf(0.5).setScale(2),racePrice.getTaxList().get(1));
         Assertions.assertEquals(BigDecimal.valueOf(0.5).setScale(2),racePrice.getTaxList().get(2));
     }
-    /*static Stream<Arguments> loadPrices()
-    {
-        return Stream.of(
-                Arguments.arguments(BigDecimal.valueOf(10),BigDecimal.valueOf(5), BigDecimal.valueOf(5),
-                        BigDecimal.valueOf(10),
-                        BigDecimal.valueOf(5), BigDecimal.valueOf(2.5), BigDecimal.valueOf(2.5)),
-                Arguments.arguments(BigDecimal.valueOf(9),BigDecimal.valueOf(1), BigDecimal.valueOf(1), BigDecimal.valueOf(1),
-                        BigDecimal.valueOf(6),
-                        BigDecimal.valueOf(4.5), BigDecimal.valueOf(2.5), BigDecimal.valueOf(2.5))
-        )
-    }*/
+    
 }
