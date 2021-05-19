@@ -10,7 +10,8 @@ public final class PriceModifier
 {
     private static BigDecimal getFullRacePrice(RacePrice rp)
     {
-        return rp.getTaxList()
+        return rp
+                .getTaxList()
                 .stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .add(rp.getBasePrice());
@@ -50,11 +51,16 @@ public final class PriceModifier
 
     public static RacePrice applyLimit(RacePrice rp, BigDecimal limit)
     {
+        if(limit.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalStateException("Values have to be greater than 0");
         List<BigDecimal> pricesList = getCalculatedFinalPrices(rp,limit);
         BigDecimal finalPrice = pricesList.stream().reduce(BigDecimal.ZERO,BigDecimal::add);
 
         if(finalPrice.subtract(limit).compareTo(BigDecimal.ZERO) != 0)
-            pricesList.set(0,pricesList.get(0).subtract(finalPrice.subtract(limit)));
+            pricesList
+                    .set(0, pricesList
+                            .get(0)
+                            .subtract(finalPrice.subtract(limit)));
 
         BigDecimal finalBasePrice = pricesList.remove(0);
         BigDecimal[] taxes = new BigDecimal[pricesList.size()];
