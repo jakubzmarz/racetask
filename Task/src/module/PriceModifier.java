@@ -52,7 +52,7 @@ public final class PriceModifier
     public static RacePrice applyLimit(RacePrice rp, BigDecimal limit)
     {
         if(limit.compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalStateException("Values have to be greater than 0");
+            throw new IllegalArgumentException("Values have to be greater than 0");
         List<BigDecimal> pricesList = getCalculatedFinalPrices(rp,limit);
         BigDecimal finalPrice = pricesList.stream().reduce(BigDecimal.ZERO,BigDecimal::add);
 

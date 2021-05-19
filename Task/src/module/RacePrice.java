@@ -13,7 +13,7 @@ public final class RacePrice
     {
         if(basePrice.compareTo(BigDecimal.ZERO) < 0
                 || !Arrays.stream(tax).filter(x -> x.compareTo(BigDecimal.ZERO) < 0).findAny().isEmpty())
-            throw new IllegalStateException("Values have to be greater than 0");
+            throw new IllegalArgumentException("Values have to be greater than 0");
         this.basePrice = basePrice;
         this.taxes = Arrays.asList(tax);
     }

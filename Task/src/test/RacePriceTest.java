@@ -62,25 +62,25 @@ public class RacePriceTest
     public void testFifthScenario()
     {
         final RacePrice racePrice = new RacePrice(new BigDecimal(0),new BigDecimal(2),new BigDecimal(2), new BigDecimal(2));
-        Assertions.assertThrows(IllegalStateException.class, () -> PriceModifier.applyLimit(racePrice, BigDecimal.valueOf(5)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> PriceModifier.applyLimit(racePrice, BigDecimal.valueOf(5)));
     }
 
     @Test
     public void testSixthScenario()
     {
-        Assertions.assertThrows(IllegalStateException.class, () -> new RacePrice(new BigDecimal(10), new BigDecimal(-4)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new RacePrice(new BigDecimal(10), new BigDecimal(-4)));
     }
 
     @Test
     public void testSeventhScenario()
     {
-        Assertions.assertThrows(IllegalStateException.class,() -> new RacePrice(new BigDecimal(-10),new BigDecimal(24)));
+        Assertions.assertThrows(IllegalArgumentException.class,() -> new RacePrice(new BigDecimal(-10),new BigDecimal(24)));
     }
 
     @Test
     public void testEightScenario()
     {
         final RacePrice racePrice = new RacePrice(new BigDecimal(8), new BigDecimal(1), new BigDecimal(1), new BigDecimal(1));
-        Assertions.assertThrows(IllegalStateException.class, () -> PriceModifier.applyLimit(racePrice, BigDecimal.valueOf(-5)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> PriceModifier.applyLimit(racePrice, BigDecimal.valueOf(-5)));
     }
 }
