@@ -60,6 +60,4 @@ public class RacePriceTest
         Assertions.assertEquals(BigDecimal.valueOf(1.15).setScale(2),racePrice.getTaxList().get(1));
         Assertions.assertEquals(BigDecimal.valueOf(0.6).setScale(2),racePrice.getTaxList().get(2));
     }
-
-
 }
