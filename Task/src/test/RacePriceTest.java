@@ -36,6 +36,7 @@ public class RacePriceTest
         Assertions.assertEquals(BigDecimal.valueOf(0.5).setScale(2),racePrice.getTaxList().get(2));
     }
 
+
     @Test
     public void testThirdScenario()
     {
